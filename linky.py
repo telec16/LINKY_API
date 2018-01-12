@@ -3,6 +3,7 @@
 import base64
 import requests
 import html
+from pprint import pprint
 
 LOGIN_BASE_URI = 'https://espace-client-connexion.enedis.fr'
 API_BASE_URI = 'https://espace-client-particuliers.enedis.fr/group/espace-particuliers'
@@ -68,7 +69,12 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
 
     res = req.json()
 
-    if res['etat'] and res['etat']['valeur'] == 'erreur' and res['etat']['erreurText']:
-        print(html.unescape(res['etat']['erreurText']))
+    if (res['etat'] and res['etat']['valeur'] == 'erreur'):
+        if ('erreurText' in res['etat']):
+            pprint(html.unescape(res['etat']['erreurText']))
+        else:
+            pprint(res['etat'])
+            
+        return None
 
     return res
